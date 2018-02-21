@@ -1,9 +1,14 @@
 $(document).ready(function() {
     
-crystals = ["assets/images/whiteCrystal", "assets/images/redCrystal", "assets/images/blueCrystal", 
-"assets/images/greenCrystal"];
+crystals = ["assets/images/whiteCrystal.png", "assets/images/redCrystal.png", "assets/images/blueCrystal.png", 
+"assets/images/greenCrystal.png"];
 var counter = 0;
+var wins = 0;
+var losses = 0;
+var score = 0;
+var total = 0;
 var numberOptions= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+var crystalValue=[];
 // have computer pick a number between 19-120
         var targetNumber = 19 + Math.floor(Math.random() * 102);
         console.log(targetNumber);
@@ -13,26 +18,52 @@ var numberOptions= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 function randomOption(numberOptions) {
     for (var i =0; i < 4; i++){
-    return numberOptions[Math.floor(Math.random()*numberOptions.length)];
+     crystalValue.push(numberOptions[Math.floor(Math.random()*numberOptions.length)]);
+    console.log(crystalValue);
 }
 }
 
 console.log(randomOption(numberOptions));
 
-$(".crystal").on("click", function() {
-    console.log("You clicked me");
-    crystal = randomOption;
-    randomOptions.push(counter);
+function start () {
+    var targetNumber = 19 + Math.floor(Math.random() * 102);
+    $('#computer').text(targetNumber);
+   counter = 0;
+   $("#totalScore").text(counter);
+   $("imageCrystal").replaceWith(imageCrystal, crystalValue, crystals);
+}
 
+$("#imageCrystal").on("click", ".crystalImage", function() {
+    console.log($(this).attr("data-num"));
+   counter = counter + parseInt($(this).data("num"));
+   $("#totalScore").text(counter);
+    if (counter === targetNumber) {
+        wins++;
+        $("#wins").text(wins);
+        start();
+    } else if (counter > targetNumber) {
+        losses++;
+        $("#losses").text(losses);
+        start();
+    }
 });
+
+
+function crystalImage () {
+    for ( var i = 0; i < 4; i++) {
+    var imageCrystal = $('<img>');
+    imageCrystal.attr('data-num', crystalValue[i]);
+    imageCrystal.attr('src', crystals[i]);
+    imageCrystal.attr('alt', 'crystals');
+    imageCrystal.addClass('crystalImage');
+    $("#imageCrystal").append(imageCrystal);
+    }
+}
+
+crystalImage();
 });
 // })
-//     var imageCrystal = $('<img>');
-//     imageCrystal.attr('data-num', numberOptions[i]);
-//     imageCrystal.attr('src', crystals[i]);
-//     imageCrystal.attr('alt', 'crystals');
-//     imageCrystal.addClass('crystalImage')
-//     $('#crystals').append(imageCrystal);
+
 
 
 // function random_item(items)
